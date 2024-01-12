@@ -11,6 +11,14 @@ interface ModuleProps {
 }
 
 export function Module({ moduleIndex, title, amountOfLessons }: ModuleProps) {
+  const { moduleActiveVideo, classroomActiveVideo } = useAppSelector(
+    (state) => {
+      const { moduleActiveVideo, classroomActiveVideo } = state.player;
+
+      return { moduleActiveVideo, classroomActiveVideo };
+    }
+  );
+
   const lessons = useAppSelector((state) => {
     return state.player.course.modules[moduleIndex].lessons;
   });
@@ -35,8 +43,15 @@ export function Module({ moduleIndex, title, amountOfLessons }: ModuleProps) {
       <Collapsible.Content>
         <nav className="relative flex flex-col gap-4 p-6">
           {lessons.map((lesson, index: number) => {
+            const stateclassrooma =
+              moduleActiveVideo === moduleIndex &&
+              classroomActiveVideo === index
+                ? true
+                : false;
+
             return (
               <Lesson
+                stateclassroom={stateclassrooma}
                 moduleIndex={moduleIndex}
                 indexClassroom={index}
                 key={lesson.id}
